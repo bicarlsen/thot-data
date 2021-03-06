@@ -6,7 +6,7 @@ with open( 'README.rst', 'r' ) as f:
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
-    "Operating System :: OS Independent",
+    "Operating System :: OS Independent"
 ]
 
 project_urls = {
@@ -17,18 +17,18 @@ project_urls = {
 
 
 setuptools.setup(
-    name='thot-data',
-    version = '0.4.9',
-    author='Brian Carlsen',
+    name = 'thot-data',
+    version = '0.4.10',
+    author = 'Brian Carlsen',
     author_email = 'carlsen.bri@gmail.com',
-    description = 'Thot data analysis and management.',
+    description = 'Python library for Thot data analysis and management.',
     long_description = long_desc,
     long_description_content_type = 'text/x-rst',
     url = 'http://www.thot-data.com',
     packages = setuptools.find_packages(),
     project_urls = project_urls,
     classifiers = classifiers,
-    
+
     install_requires = [
         'thot-core>=0.4.9'
     ],
