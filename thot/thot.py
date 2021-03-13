@@ -130,13 +130,20 @@ class ThotProject( ThotInterface ):
             return info.filename
 
 
-        # check file is defined
-        if 'file' not in asset:
-            _id = str( uuid() )
-            asset[ 'file' ] = _id
-
         if _id is None:
-            _id = str( uuid() )
+            # default id to name then file, if available
+            # otherwise create uuid
+            _id = (
+                asset[ 'name' ]
+                if ( 'name' in asset ) and ( asset[ 'name' ] ) else
+                asset[ 'file' ]
+                if ( 'file' in asset ) and ( asset[ 'file' ] ) else
+                str( uuid() )
+            )
+
+        # check file is defined, deafult to id
+        if ( 'file' not in asset ) or ( not asset[ 'file' ] ):
+            asset[ 'file' ] = _id
 
         # set properties
         asset[ 'creator_type' ] = 'script'
@@ -190,17 +197,3 @@ class ThotProject( ThotInterface ):
 
         container = Container( **container )
         return container
-
-
-    # --- DEPRICATED ---
-    # @staticmethod
-    # def _sort_objects( objects ):
-    #     """
-    #     Sorts a list of LocalObjects by kind
-    #     """
-    #     # sort types of children
-    #     kinds = { kind: [] for kind in LocalObject.kinds }
-    #     for obj in objects:
-    #         kinds[ obj.kind ].append( obj )
-
-    #     return kinds
