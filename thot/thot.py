@@ -23,9 +23,10 @@ class ThotProject( ThotInterface ):
     Local Thot project interface, used to retrieve Containers and Assests.
     """
 
-    def __init__( self, root = None ):
+    def __init__( self, root = None, dev_root = None ):
         """
         :param root: Root Container or None to get from environment variable THOT_CONTAINER_ID.
+        :param dev_root: Root Container to be used in dev mode. [Default: None]
         """
         # save environment
         ORIGINAL_DIR = 'THOT_ORIGINAL_DIR'
@@ -34,6 +35,9 @@ class ThotProject( ThotInterface ):
 
         # move to original directory, so relative paths are correct
         os.chdir( os.environ[ ORIGINAL_DIR ] )
+
+        if self.dev_mode():
+            root = dev_root
 
         if root is not None:
             root = os.path.abspath( root )
