@@ -36,7 +36,7 @@ class ThotProject( ThotInterface ):
         # move to original directory, so relative paths are correct
         os.chdir( os.environ[ ORIGINAL_DIR ] )
 
-        if self.dev_mode():
+        if self.dev_mode() and ( root is None ):
             root = dev_root
 
         if root is not None:
