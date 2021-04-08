@@ -589,10 +589,13 @@ class LocalCollection():
                     if op == '$in':
                         # inclusion operator
                         if not isinstance( val, list ):
-                            raise TypeError( f'Invalid search criteria {op}: {val}' )
+                            raise TypeError( f'Invalid search criteria {op}: {val}. Value must be list.' )
 
-                        if obj not in val:
-                            return False
+                        if not isinstance( obj, list ):
+                            raise TypeError( 'Invalid search object. Must be list.' )
+
+                        # test all values are included in object
+                        return all( [ ( v in obj ) for v in val ] )
 
                     else:
                         # not an operator
