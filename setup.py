@@ -18,7 +18,7 @@ project_urls = {
 
 setuptools.setup(
     name = 'thot-data',
-    version = '0.5.0',
+    version = '0.5.1',
     author = 'Brian Carlsen',
     author_email = 'carlsen.bri@gmail.com',
     description = 'Python library for Thot data analysis and management.',
