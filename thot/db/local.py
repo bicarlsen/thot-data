@@ -6,7 +6,6 @@
 import os
 import re
 import json
-import typing
 import shutil
 from pathlib import Path
 from datetime import datetime
@@ -16,6 +15,8 @@ from functools import partial
 from collections.abc import Mapping
 
 from thot_core.classes.resource import Resource, ResourceJSONEncoder
+
+from ..functions import property_filter
 
 
 # --- Helper Functions
@@ -541,83 +542,9 @@ class LocalCollection():
             [Default: {}]
         :returns: List of LocalObjects matching search criteria.
         """
-
-        def filter_prop( prop, value, obj ):
-            """
-            Check if object matched property filter.
-
-            :param prop: Name of the property to check.
-            :param value: Value to match.
-            :param obj: LocalObject.
-            :returns: True if matches, False otherwise.
-            """
-            # parse prop
-            prop_path = prop.split( '.' )
-            for part in prop_path:
-                try:
-                    obj = obj[ part ]
-
-                except KeyError as err:
-                    # property not contained in object
-                    return False
-
-            if isinstance( value, list ):
-                # value is list, check for inclusion
-                if isinstance( obj, list ):
-                    # object is list, verfiy all values are in object
-                    for item in value:
-                        if isinstance( item, typing.Pattern ):
-                            # value is regex
-                            match = item.search( value )
-                            return ( match is None )
-
-                        if item not in obj:
-                            # search item not obj
-                            return False
-
-                    # all items present
-                    return True
-
-
-                else:
-                    # object is not list, can not match
-                    return False
-
-            elif isinstance( value, dict ):
-                # value is dictionary, search for operators
-                for op, val in value.items():
-                    if op == '$in':
-                        # inclusion operator
-                        if not isinstance( val, list ):
-                            raise TypeError( f'Invalid search criteria {op}: {val}. Value must be list.' )
-
-                        if not isinstance( obj, list ):
-                            raise TypeError( 'Invalid search object. Must be list.' )
-
-                        # test all values are included in object
-                        return all( [ ( v in obj ) for v in val ] )
-
-                    else:
-                        # not an operator
-                        raise TypeError( f'Invalid search operator {op}' )
-
-                # passed all operator checks
-                return True
-
-            else:
-                # value is not list, check for direct match
-                if isinstance( value, typing.Pattern ):
-                    # value is regex
-                    match = value.search( obj )
-                    return ( match is not None )
-
-                # simple value
-                return ( obj == value )
-
-
         matching = self.__objects
         for prop, value in search.items():
-            obj_fltr = partial( filter_prop, prop, value )
+            obj_fltr = partial( property_filter, prop, value )
             matching = filter( obj_fltr, matching )
 
         return list( matching )

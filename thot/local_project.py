@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# --- Thot
+# Local Project
 # Library for data analysis and management.
 
 import os
@@ -15,8 +15,6 @@ from thot_core.classes.script         import ScriptAssociation
 
 from .db.local import LocalObject, LocalDB
 
-
-# ------ Local
 
 class ThotProject( ThotInterface ):
     """
